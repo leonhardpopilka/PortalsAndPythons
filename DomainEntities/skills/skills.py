@@ -1,37 +1,71 @@
 import random
 from abc import ABC, abstractmethod
-from DomainEntities.actors.attributes import Attributes
+from DomainEntities.items.items import Item
 
-class BaseSkills(ABC):
+class Skill(ABC):
     """An abstract class for all skills in the game"""
 
-    def __init__(self, attributes: Attributes):
-        self.attack_max = attributes.strength
-        self.defense_max = attributes.dexterity
-        self.magic_max = attributes.courage
-        self.stealth_max = attributes.wisdom
+    @abstractmethod
+    def check(self, value: int) -> int:
+        pass
 
-    def __str__(self):
-        return f"Attack: {self.attack_max}, Defense: {self.defense_max}, Magic: {self.magic_max}, Stealth: {self.stealth_max}"
 
-    def attack(self):
-        return random.randint(0, self.attack_max)
+class AttackSkill(Skill):
+    """A class for all attack skills in the game"""
 
-    def defense(self):
-        return random.randint(0, self.defense_max)
+    def __init__(self, courage: int, strength: int):
+        self.courage: int = courage
+        self.strength: int = strength
 
-    def magic(self):
-        return random.randint(0, self.stealth_max)
+    def check(self, modifier: int = 0) -> int:
+        return random.randint(0, self.courage) + modifier
+    
+    def damage(self, weapon: Item) -> int:
+        return random.randint(0, self.strength + weapon.value)
 
-    def stealth(self, max):
-        return random.randint(0, max)
+class DefenseSkill(Skill): 
+    """A class for defense against attacks"""
 
-    def defended_against_attack(self, attack: int) -> bool:
-        return self.defense() >= attack
+    def __init__(self, dexterity: int):
+        self.dexterity: int = dexterity
 
-    def defended_against_magic(self, magic: int) -> bool:
-        return self.stealth() >= magic
+    def check(self, modifier: int = 0) -> int:
+        return random.randint(0, self.dexterity) + modifier
 
-class Skills(BaseSkills):
-    def __init__(self, attributes: Attributes):
-        super().__init__(attributes=attributes)
+class MagicSkill(Skill):
+    """A class for all magic skills in the game"""
+
+    def __init__(self, courage: int):
+        self.courage : int = courage
+
+    def check(self, modifier: int = 0) -> int:
+        return random.randint(0, self.courage) + modifier
+
+class StealthSkill(Skill):
+    """A class for all stealth skills in the game"""
+
+    def __init__(self, dexterity: int):
+        self.dexterity: int = dexterity
+
+    def check(self, modifier: int = 0) -> int:
+        return random.randint(0, self.dexterity) + modifier
+
+# class BaseSkills(ABC):
+#     """An abstract class for all skills in the game"""
+
+#     def __init__(self, attributes: Attributes):
+#         self.attack_max = attributes.strength
+#         self.defense_max = attributes.dexterity
+#         self.magic_max = attributes.courage
+#         self.stealth_max = attributes.wisdom
+
+#     def __str__(self):
+#         return f"Attack: {self.attack_max}, Defense: {self.defense_max}, Magic: {self.magic_max}, Stealth: {self.stealth_max}"
+
+
+#     def defended_against_attack(self, attack: int) -> bool:
+#         return self.defense() >= attack
+
+#     def defended_against_magic(self, magic: int) -> bool:
+#         return self.stealth() >= magic
+

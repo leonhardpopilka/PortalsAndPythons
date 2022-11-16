@@ -1,11 +1,14 @@
 from DomainEntities.actors.character import Character
 from DomainEntities.actors.attributes import Attributes
+from DomainEntities.items.items import Weapon
 
 if __name__ == "__main__":
-    sigerik = Character("Sigerik", Attributes(10, 10, 10, 10), [])
+    sharp_sword = Weapon("Sword", "A sharp sword.", 4)
+    blunt_sword = Weapon("Sword", "A blunt sword.", 1)
+    sigerik = Character("Sigerik", Attributes(10, 10, 10, 10), [sharp_sword])
     print(sigerik)
 
-    aaron = Character("Aaron", Attributes(12, 10, 8, 11), [])
+    aaron = Character("Aaron", Attributes(12, 10, 8, 11), [blunt_sword])
     print(aaron)
     
     round = 1

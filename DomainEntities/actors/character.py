@@ -3,9 +3,10 @@
 from typing import Collection, List
 from abc import ABC, abstractmethod
 
-from DomainEntities.skills.skills import Skills
-from DomainEntities.items.items import Item
+from DomainEntities.skills.skills import Skill, AttackSkill, DefenseSkill, MagicSkill, StealthSkill
+from DomainEntities.items.items import Item, Weapon
 from .attributes import Attributes
+from .status import Status, Wounded
 
 class ActorTypes:
     Character = 1
@@ -29,18 +30,19 @@ class ActorBase(ABC):
         pass
 
     @abstractmethod
-    def attack(self, target):
-        pass
-
-    def __str__(self):
-        pass
-
-    @abstractmethod
     def _take_damage(self, damage):
         pass
 
     @abstractmethod
     def _apply_damage(self):
+        pass
+
+    @abstractmethod
+    def defend_against_attack(self, attack: int) -> bool:
+        pass
+
+    @abstractmethod
+    def defend_against_magic(self, magic: int) -> bool:
         pass
 
 class Actor(ActorBase):
@@ -56,17 +58,42 @@ class Actor(ActorBase):
         self.attributes: Attributes = attributes
         self.actor_type: ActorTypes = actor_type
         self.inventory: Collection[Item] = inventory
-        self.skills: Collection[Skills] = Skills(attributes=self.attributes)
+        self.skills: Collection[Skill] = self._set_skills_from_attributes()
+        self.status: Collection[Status] = []
         self.base_health: int = self._calculate_health()
         self.current_health: int = self.base_health
 
-    
+
     def attack(self, target):
-        if target.skills.defended_against_attack(self.skills.attack()):
+        weapon = self._get_item(Weapon)
+        if weapon is None:
+            print(f"{self.name} has no weapon and cannot attack")
+            return
+        attack = self._get_skill(AttackSkill)
+        if target.defend_against_attack(attack.check()):
             print(f"{self.name} missed {target.name}")
         else:
-            print(f"{self.name} hit {target.name}")
-            target._take_damage(self._apply_damage())
+            print(f"{self.name} hit {target.name} with {weapon.description}")
+            target._take_damage(attack.damage(weapon))
+
+    def _get_skill(self, skill_class):
+        for skill in self.skills:
+            if isinstance(skill, skill_class):
+                return skill
+    
+    def _get_item(self, item_class):
+        for item in self.inventory:
+            if isinstance(item, item_class):
+                return item
+
+    
+    def defend_against_attack(self, attack: int) -> bool:
+        defense = self._get_skill(DefenseSkill)
+        return defense.check() >= attack
+
+    def defend_against_magic(self, magic: int) -> bool:
+        stealth = self._get_skill(StealthSkill)
+        return stealth.check() >= magic
 
     def _calculate_health(self):
         return self.attributes.strength * self.attributes.courage
@@ -79,12 +106,14 @@ class Actor(ActorBase):
         print(f"{self.name} has dealt {self.attributes.strength} damage")
         return self.attributes.strength
 
-    def _set_skills_from_attributes(self) -> Skills:
-        return Skills(courage=self.attributes.courage, 
-                      wisdom=self.attributes.wisdom, 
-                      dexterity=self.attributes.dexterity, 
-                      strength=self.attributes.strength,
-                      )
+    def _set_skills_from_attributes(self) -> Collection[Skill]:
+        """Set the skills for this character based on their attributes"""
+        return [
+            AttackSkill(self.attributes.courage, self.attributes.strength),
+            DefenseSkill(dexterity=self.attributes.dexterity),
+            MagicSkill(self.attributes.courage),
+            StealthSkill(self.attributes.dexterity)
+        ]
 
     def _take_damage(self, damage):
         self.current_health -= damage
