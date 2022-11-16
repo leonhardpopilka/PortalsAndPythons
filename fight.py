@@ -1,11 +1,7 @@
-from character import Character, Attributes, Item, ItemTypes
-
-import random
-
-# create Items from ItemTypes
-class Weapon(Item):
-    pass
-
+from DomainEntities.character import Character
+from DomainEntities.attributes import Attributes
+# from .DomainEntities.skills import Skills
+# from .DomainEntities.items import Item, Weapon, Armor, Bag, Potion
 
 sigerik = Character("Sigerik", Attributes(10, 10, 10, 10, 10))
 print(sigerik)
