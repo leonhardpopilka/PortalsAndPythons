@@ -82,8 +82,8 @@ class Actor(ActorBase):
 
     def __str__(self):
         """Return a string representation of this character with Attributes and Skills"""
-        return f"{self.name} has {self.current_health} health, {self.attributes}, and {self.skills}"\
-        f" and is carrying {self.inventory}"
+        return f"{self.name} has {self.current_health} health, {self.attributes} and\n{self.skills}"\
+        f" and is carrying\n{self.inventory}"
         
 
 class Character(Actor):
