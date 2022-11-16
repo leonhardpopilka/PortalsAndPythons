@@ -21,6 +21,10 @@ class ActorBase(ABC):
         pass
 
     @abstractmethod
+    def is_alive(self):
+        pass
+
+    @abstractmethod
     def _set_skills_from_attributes(self):
         pass
 
@@ -62,12 +66,17 @@ class Actor(ActorBase):
             print(f"{self.name} missed {target.name}")
         else:
             print(f"{self.name} hit {target.name}")
-            target._take_damage(self.apply_damage())
+            target._take_damage(self._apply_damage())
 
     def _calculate_health(self):
         return self.attributes.strength * self.attributes.courage
     
+    @property
+    def is_alive(self):
+        return self.current_health > 0
+
     def _apply_damage(self):
+        print(f"{self.name} has dealt {self.attributes.strength} damage")
         return self.attributes.strength
 
     def _set_skills_from_attributes(self) -> Skills:
@@ -78,7 +87,8 @@ class Actor(ActorBase):
                       )
 
     def _take_damage(self, damage):
-        self.health -= damage
+        self.current_health -= damage
+        print(f"{self.name} took {damage} damage and has {self.current_health} health left")
 
     def __str__(self):
         """Return a string representation of this character with Attributes and Skills"""

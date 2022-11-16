@@ -7,10 +7,13 @@ if __name__ == "__main__":
 
     aaron = Character("Aaron", Attributes(12, 10, 8, 11), [])
     print(aaron)
+    
+    round = 1
+    while sigerik.is_alive and aaron.is_alive:
+        print(f"\nRound {round}")
+        sigerik.attack(aaron)
+        aaron.attack(sigerik)
+        round += 1
 
-    print(sigerik.skills.defended_against_attack(aaron.skills.attack()))
-    print(sigerik.skills.defended_against_attack(aaron.skills.attack()))
-    print(sigerik.skills.defended_against_attack(aaron.skills.attack()))
-    print(sigerik.skills.defended_against_attack(aaron.skills.attack()))
 
 
