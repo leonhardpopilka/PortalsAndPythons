@@ -1,12 +1,10 @@
-from DomainEntities.character import Character
-from DomainEntities.attributes import Attributes
-# from .DomainEntities.skills import Skills
-# from .DomainEntities.items import Item, Weapon, Armor, Bag, Potion
+from DomainEntities.actors.character import Character
+from DomainEntities.actors.attributes import Attributes
 
-sigerik = Character("Sigerik", Attributes(10, 10, 10, 10, 10))
+sigerik = Character("Sigerik", Attributes(10, 10, 10, 10), [])
 print(sigerik)
 
-aaron = Character("Aaron", Attributes(12, 10, 8, 11, 9))
+aaron = Character("Aaron", Attributes(12, 10, 8, 11), [])
 print(aaron)
 
 print(sigerik.skills.defended_against_attack(aaron.skills.attack()))

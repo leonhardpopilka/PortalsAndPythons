@@ -1,11 +1,15 @@
 import random
+from abc import ABC, abstractmethod
+from DomainEntities.actors.attributes import Attributes
 
-class Skills:
-    def __init__(self, attack , defense, magic, stealth):
-        self.attack_max = attack
-        self.defense_max = defense
-        self.magic_max = magic
-        self.stealth_max = stealth
+class BaseSkills(ABC):
+    """An abstract class for all skills in the game"""
+
+    def __init__(self, attributes: Attributes):
+        self.attack_max = attributes.strength
+        self.defense_max = attributes.dexterity
+        self.magic_max = attributes.courage
+        self.stealth_max = attributes.wisdom
 
     def __str__(self):
         return f"Attack: {self.attack_max}, Defense: {self.defense_max}, Magic: {self.magic_max}, Stealth: {self.stealth_max}"
@@ -27,3 +31,7 @@ class Skills:
 
     def defended_against_magic(self, magic: int) -> bool:
         return self.stealth() >= magic
+
+class Skills(BaseSkills):
+    def __init__(self, attributes: Attributes):
+        super().__init__(attributes=attributes)
