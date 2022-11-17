@@ -8,6 +8,11 @@ from DomainEntities.items.items import Item
 class Skill(ABC):
     """An abstract class for all skills in the game"""
 
+    @property
+    @abstractmethod
+    def name(self) -> str:
+        pass
+
     @abstractmethod
     def check(self, modifier: int = 0) -> int:
         pass
@@ -31,6 +36,10 @@ class AttackSkill(Skill):
         self.courage: int = courage
         self.strength: int = strength
 
+    @property
+    def name(self) -> str:
+        return "Attack"
+
     def check(self, modifier: int = 0) -> int:
         return random.randint(0, self.courage) + modifier
 
@@ -50,6 +59,10 @@ class DefenseSkill(Skill):
     def __init__(self, dexterity: int):
         self.dexterity: int = dexterity
 
+    @property
+    def name(self) -> str:
+        return "Defense"
+
     def check(self, modifier: int = 0) -> int:
         return random.randint(0, self.dexterity) + modifier
 
@@ -66,6 +79,10 @@ class MagicSkill(Skill):
     def __init__(self, courage: int, wisdom: int):
         self.courage: int = courage
         self.wisdom: int = wisdom
+
+    @property
+    def name(self) -> str:
+        return "Magic"
 
     def check(self, modifier: int = 0) -> int:
         return random.randint(0, self.courage) + modifier
@@ -85,6 +102,10 @@ class StealthSkill(Skill):
 
     def __init__(self, dexterity: int):
         self.dexterity: int = dexterity
+
+    @property
+    def name(self) -> str:
+        return "Stealth"
 
     def check(self, modifier: int = 0) -> int:
         return random.randint(0, self.dexterity) + modifier

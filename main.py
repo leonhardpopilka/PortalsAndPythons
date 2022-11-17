@@ -1,4 +1,4 @@
-from DomainEntities.actors.playercharacter import PlayerCharacter
+from DomainEntities.actors.playercharacter import PlayerCharacter, CharacterClasses
 from DomainEntities.actors.attributes import Attributes
 from DomainEntities.items.items import Weapon
 
@@ -18,6 +18,7 @@ if __name__ == "__main__":
 
     sigerik = PlayerCharacter(
         "Sigerik",
+        CharacterClasses.WARRIOR,
         Attributes(
             courage=2,
             strength=4,
@@ -28,6 +29,7 @@ if __name__ == "__main__":
     )
     aaron = PlayerCharacter(
         "Aaron",
+        CharacterClasses.MAGE,
         Attributes(
             courage=4,
             strength=2,
