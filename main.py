@@ -19,9 +19,9 @@ if __name__ == "__main__":
     sigerik = Character(
         "Sigerik",
         Attributes(
-            courage=5,
+            courage=3,
             strength=3,
-            dexterity=1,
+            dexterity=3,
             wisdom=1,
         ),
         [sharp_sword]
