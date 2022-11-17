@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+
 class Status(ABC):
     """An abstract class for all statuses in the game"""
 
@@ -12,16 +13,26 @@ class Status(ABC):
     @abstractmethod
     def value(self) -> int:
         pass
-    
+
     @property
     @abstractmethod
     def description(self) -> str:
         pass
 
+    @property
+    def is_active(self) -> bool:
+        return self.value > 0
+
+    @abstractmethod
+    def reset(self):
+        pass
+
     def __str__(self):
         return f"{self.name}: {self.value}\n{self.description}"
 
+
 class Wounded(Status):
+
     def __init__(self, value: int):
         self._name = "Wounded"
         self._value = value
@@ -38,3 +49,6 @@ class Wounded(Status):
     @property
     def description(self) -> str:
         return "This character is wounded and has a reduced health"
+
+    def reset(self):
+        self._value = 0
