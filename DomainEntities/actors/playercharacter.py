@@ -1,9 +1,9 @@
 # creat a RPG character with attributes and skills
 from enum import Enum
-from typing import Collection
+from typing import Collection, Type, TypeVar
 from abc import ABC, abstractmethod
 
-from DomainEntities.skills.skills import Skill, AttackSkill, DefenseSkill, MagicSkill, StealthSkill
+from DomainEntities.skills.skills import Skill, AttackSkill, DefenseSkill, MagicSkill, StealthSkill, SkillTypeVar
 from DomainEntities.items.items import Item, Weapon
 from .attributes import Attributes
 from .status import Status
@@ -66,6 +66,10 @@ class Actor(ActorBase):
         self.base_health: int = self._calculate_health()
         self.current_health: int = self.base_health
 
+    @property
+    def is_alive(self):
+        return self.current_health > 0
+
     def attack(self, target):
         weapon = self._get_item(Weapon)
         if weapon is None:
@@ -78,16 +82,6 @@ class Actor(ActorBase):
             print(f"{self.name} hit {target.name} with {weapon.description}")
             target.take_damage(attack.damage(weapon))
 
-    def _get_skill(self, skill_class) -> Skill:
-        for skill in self.skills:
-            if isinstance(skill, skill_class):
-                return skill
-
-    def _get_item(self, item_class):
-        for item in self.inventory:
-            if isinstance(item, item_class):
-                return item
-
     def defend_against_attack(self, attack: int) -> bool:
         defense: Skill = self._get_skill(DefenseSkill)
         return defense.check() > attack
@@ -95,26 +89,6 @@ class Actor(ActorBase):
     def defend_against_magic(self, magic: int) -> bool:
         stealth = self._get_skill(StealthSkill)
         return stealth.check() > magic
-
-    def _calculate_health(self):
-        return self.attributes.strength * self.attributes.dexterity
-
-    @property
-    def is_alive(self):
-        return self.current_health > 0
-
-    def _apply_damage(self):
-        print(f"{self.name} has dealt {self.attributes.strength} damage")
-        return self.attributes.strength
-
-    def _set_skills_from_attributes(self) -> Collection[Skill]:
-        """Set the skills for this character based on their attributes"""
-        return [
-            AttackSkill(self.attributes.courage, self.attributes.strength),
-            DefenseSkill(dexterity=self.attributes.dexterity),
-            MagicSkill(self.attributes.courage, self.attributes.wisdom),
-            StealthSkill(self.attributes.dexterity)
-        ]
 
     def take_damage(self, damage):
         self.current_health -= damage
@@ -131,6 +105,32 @@ class Actor(ActorBase):
             self.current_health = self.base_health
         print(f"{self.name} healed {amount} and now has {self.current_health} health")
 
+    def _get_skill(self, skill_class) -> SkillTypeVar:
+        for skill in self.skills:
+            if isinstance(skill, skill_class):
+                return skill
+
+    def _get_item(self, item_class):
+        for item in self.inventory:
+            if isinstance(item, item_class):
+                return item
+
+    def _calculate_health(self):
+        return self.attributes.strength * self.attributes.dexterity
+
+    def _apply_damage(self):
+        print(f"{self.name} has dealt {self.attributes.strength} damage")
+        return self.attributes.strength
+
+    def _set_skills_from_attributes(self) -> Collection[Skill]:
+        """Set the skills for this character based on their attributes"""
+        return [
+            AttackSkill(self.attributes.courage, self.attributes.strength),
+            DefenseSkill(dexterity=self.attributes.dexterity),
+            MagicSkill(self.attributes.courage, self.attributes.wisdom),
+            StealthSkill(self.attributes.dexterity)
+        ]
+
     def __str__(self):
         """Return a string representation of this character with Attributes and Skills"""
         return f"{self.name} has {self.current_health} health, {self.attributes} and\n{self.skills}" \
@@ -142,8 +142,8 @@ class Actor(ActorBase):
                f" and is carrying\n{self.inventory}"
 
 
-class Character(Actor):
-    """A class for all characters in the game"""
+class PlayerCharacter(Actor):
+    """A class for all player-characters in the game"""
 
     def __init__(self,
                  name: str,
@@ -151,4 +151,36 @@ class Character(Actor):
                  inventory: Collection[Item],
                  ):
         super().__init__(name, attributes, ActorTypes.CHARACTER, inventory)
+        self._exp: int = 0
 
+    @property
+    def exp(self):
+        return self._exp
+
+    def add_exp(self, amount):
+        self._exp += amount
+        print(f"{self.name} gained {amount} experience and now has {self._exp} experience")
+
+    def __str__(self):
+        """Return a string representation of this character with Attributes and Skills"""
+        return f"{self.name} (XP: {self.exp}) has {self.current_health} health, {self.attributes} and\n{self.skills}" \
+               f" and is carrying\n{self.inventory}"
+
+    def __repr__(self):
+        """Return a string representation of this character with Attributes and Skills"""
+        return f"{self.name} (XP: {self.exp}) has {self.current_health} health, {self.attributes} and\n{self.skills}" \
+               f" and is carrying\n{self.inventory}"
+
+
+class NonPlayerCharacter(Actor):
+    """A class for all non-player-characters in the game"""
+
+    def __init__(self,
+                 name: str,
+                 attributes: Attributes,
+                 inventory: Collection[Item],
+                 ):
+        super().__init__(name, attributes, ActorTypes.NSC, inventory)
+
+
+ActorTypeVar = TypeVar('ActorTypeVar', bound=Actor)

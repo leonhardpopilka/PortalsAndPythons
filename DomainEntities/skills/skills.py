@@ -1,5 +1,7 @@
 import random
 from abc import ABC, abstractmethod
+from typing import TypeVar
+
 from DomainEntities.items.items import Item
 
 
@@ -17,6 +19,9 @@ class Skill(ABC):
     @abstractmethod
     def __repr__(self):
         pass
+
+
+SkillTypeVar = TypeVar("SkillTypeVar", bound=Skill)
 
 
 class AttackSkill(Skill):

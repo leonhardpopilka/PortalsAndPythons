@@ -1,9 +1,9 @@
-from DomainEntities.actors.character import Character
+from DomainEntities.actors.playercharacter import PlayerCharacter
 from DomainEntities.actors.attributes import Attributes
 from DomainEntities.items.items import Weapon
 
 
-def determine_winner(a: Character, b: Character):
+def determine_winner(a: PlayerCharacter, b: PlayerCharacter):
     if not a.is_alive and b.is_alive:
         return b
     elif not b.is_alive and a.is_alive:
@@ -16,7 +16,7 @@ if __name__ == "__main__":
     sharp_sword = Weapon("Sword", "a sharp sword.", 1)
     blunt_sword = Weapon("Sword", "a blunt sword.", 1)
 
-    sigerik = Character(
+    sigerik = PlayerCharacter(
         "Sigerik",
         Attributes(
             courage=2,
@@ -26,7 +26,7 @@ if __name__ == "__main__":
         ),
         [sharp_sword]
     )
-    aaron = Character(
+    aaron = PlayerCharacter(
         "Aaron",
         Attributes(
             courage=4,

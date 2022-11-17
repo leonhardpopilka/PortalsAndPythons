@@ -1,5 +1,6 @@
 from abc import ABC
 from enum import Enum
+from typing import TypeVar
 
 
 class ItemTypes(Enum):
@@ -41,3 +42,6 @@ class Bag(Item):
 class Potion(Item):
     def __init__(self, name, description, value):
         super().__init__(name, description, ItemTypes.POTION, value)
+
+
+ItemTypeVar = TypeVar('ItemTypeVar', bound=Item)
