@@ -25,11 +25,11 @@ class Item(ABC):
         self.value: int = value
 
     @abstractmethod
-    def use(self, item_user, target):
+    def use(self, item_user, target=None):
         pass
 
     @abstractmethod
-    def effect(self) -> Callable[[Any], None]:
+    def effect(self, item_user=None, target=None):
         pass
 
     def __str__(self):
@@ -47,7 +47,7 @@ class Weapon(Item):
     # def use(self, item_user: ActorBase, target: ActorBase):
         item_user.attack(target)
 
-    def effect(self) -> Callable[[Any], None]:
+    def effect(self, item_user=None, target=None):
         pass
 
 
@@ -55,10 +55,10 @@ class Armor(Item):
     def __init__(self, name, description, value):
         super().__init__(name, description, ItemTypes.ARMOR, value)
 
-    def use(self, item_user, target):
+    def use(self, item_user, target=None):
         pass
 
-    def effect(self) -> Callable[[Any], None]:
+    def effect(self, item_user=None, target=None):
         pass
 
 
@@ -67,10 +67,10 @@ class Bag(Item):
     def __init__(self, name, description, value):
         super().__init__(name, description, ItemTypes.BAG, value)
 
-    def use(self, item_user, target):
+    def use(self, item_user, target=None):
         pass
 
-    def effect(self) -> Callable[[Any], None]:
+    def effect(self, item_user=None, target=None):
         pass
 
 
@@ -79,10 +79,10 @@ class Potion(Item):
     def __init__(self, name, description, value):
         super().__init__(name, description, ItemTypes.POTION, value)
 
-    def use(self, item_user, target):
+    def use(self, item_user, target=None):
         pass
 
-    def effect(self) -> Callable[[Any], None]:
+    def effect(self, item_user=None, target=None):
         return lambda actor: actor.heal(self.value)
 
 

@@ -1,10 +1,13 @@
-from abc import ABC, abstractmethod
-from typing import Callable, Any
-
-from DomainEntities.items.items import Item, Effect, ItemTypes
+from DomainEntities.items.items import Item, ItemTypes
 
 
-class Spell(Item, ABC):
+class Spell(Item):
+
+    def use(self, item_user, target=None):
+        pass
+
+    def effect(self, item_user=None, target=None):
+        pass
 
     def __init__(self, name: str, description: str, value: int, mana_cost: int):
         super().__init__(name, description, ItemTypes.SPELL, value)
@@ -16,15 +19,3 @@ class Spell(Item, ABC):
     def __repr__(self):
         return f"Spell(name: {self.name}, description: {self.description}, " \
                f"value: {self.value} mana_cost: {self.cost})"
-
-
-class Fireball(Spell):
-
-    def __init__(self, name: str, description: str, value: int, mana_cost: int):
-        super().__init__(name, description, value, mana_cost)
-
-    def use(self, item_user, target):
-        pass
-
-    def effect(self) -> Callable[[Any], None]:
-        pass
