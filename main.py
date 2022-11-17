@@ -19,8 +19,8 @@ if __name__ == "__main__":
     sigerik = Character(
         "Sigerik",
         Attributes(
-            courage=3,
-            strength=3,
+            courage=2,
+            strength=4,
             dexterity=3,
             wisdom=1,
         ),
@@ -29,8 +29,8 @@ if __name__ == "__main__":
     aaron = Character(
         "Aaron",
         Attributes(
-            courage=3,
-            strength=3,
+            courage=4,
+            strength=2,
             dexterity=3,
             wisdom=1,
         ),
@@ -55,6 +55,7 @@ if __name__ == "__main__":
             counter[winner.name] += 1
         else:
             print("\nIt's a draw!")
+
         sigerik.reset()
         aaron.reset()
 

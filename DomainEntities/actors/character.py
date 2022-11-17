@@ -90,14 +90,14 @@ class Actor(ActorBase):
 
     def defend_against_attack(self, attack: int) -> bool:
         defense: Skill = self._get_skill(DefenseSkill)
-        return defense.check() >= attack
+        return defense.check() > attack
 
     def defend_against_magic(self, magic: int) -> bool:
         stealth = self._get_skill(StealthSkill)
-        return stealth.check() >= magic
+        return stealth.check() > magic
 
     def _calculate_health(self):
-        return self.attributes.strength * self.attributes.courage
+        return self.attributes.strength * self.attributes.dexterity
 
     @property
     def is_alive(self):
